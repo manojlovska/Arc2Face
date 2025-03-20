@@ -1,0 +1,4 @@
+*.bin
+*.pyc
+*.onnx
+*.safetensors
