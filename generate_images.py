@@ -64,7 +64,7 @@ pipeline = pipeline.to('cuda:0')
 app = FaceAnalysis(name='antelopev2', root='./', providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
 app.prepare(ctx_id=0, det_size=(640, 640))
 
-img = np.array(Image.open('assets/examples/jackie.png'))[:,:,::-1]
+img = np.array(Image.open('assets/examples/lily.png'))[:,:,::-1]
 
 faces = app.get(img)
 faces = sorted(faces, key=lambda x:(x['bbox'][2]-x['bbox'][0])*(x['bbox'][3]-x['bbox'][1]))[-1]  # select largest face (if more than one detected)
@@ -75,8 +75,8 @@ id_emb = project_face_embs(pipeline, id_emb)    # pass through the encoder
 # Generate images
 num_images = 4
 images = pipeline(prompt_embeds=id_emb, num_inference_steps=25, guidance_scale=3.0, num_images_per_prompt=num_images).images
-
-save_images_grid(images, save_path="images/output_grid.png")
-
+latents = pipeline(prompt_embeds=id_emb, num_inference_steps=25, guidance_scale=3.0, num_images_per_prompt=num_images, output_type="latent").images
 import pdb
 pdb.set_trace()
+
+save_images_grid(images, save_path="images/output_grid_lily.png")
